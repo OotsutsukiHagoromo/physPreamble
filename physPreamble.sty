@@ -16,6 +16,8 @@
 \RequirePackage{preambleColors}
 \RequirePackage{preambleReferences}
 
+\RequirePackage{booktabs}
+
 % =============================================================================
 
 % \usepackage{minted}
@@ -104,6 +106,14 @@
 %\RequirePackage{physics}
 \RequirePackage{float}
 \RequirePackage{placeins}
+
+\RequirePackage{tcolorbox}
+
+\tcbuselibrary{minted}
+\tcbuselibrary{skins}
+\tcbuselibrary{raster}
+\tcbuselibrary{breakable}
+
 
 \RequirePackage{pdflscape}
 %\usepackage{lscape}
@@ -272,11 +282,13 @@
 
 	\usepackage[charter,vvarbb,scaled=1.05]{newtx}
 	\linespread{1.04}
-	% \renewcommand*{\ttdefault}{\sfdefault}
+	\renewcommand*{\ttdefault}{\sfdefault}
 \fi
 \ifpreamblefontTimes
 	%\usepackage[libertine,vvarbb,scaled=1.05]{newtxmath}
 	\usepackage[libertinus, vvarbb, varg]{newtx}
+	% inconsolata typewriter
+	\usepackage[scaled=1.04,varqu,varl]{inconsolata}
 	\AtBeginDocument{%
 		\DeclareFontFamilySubstitution{T2A}{\scdefault}{Tempora-TLF}%
 	}
@@ -590,35 +602,48 @@
 \newcommand*{\const}{\mathrm{const}}
 \newcommand*{\Mat}{\mathrm{Mat}}
 
-\newcommand*{\makeTitlepage}[3]{%
-	\renewcommand*{\labNum}{#1}
-	\renewcommand*{\labName}{#2}
-	\renewcommand*{\dateStart}{#3}
-	\makeTitlepageInner
+\newcommand*{\makeTitlepage}[4][]{%
+	\renewcommand*{\labNum}{#2}
+	\renewcommand*{\labName}{#3}
+	\renewcommand*{\dateStart}{#4}
+	\makeTitlepageInner[#1]
 }
 
-\newcommand*{\makeTitlepageOther}[6]{%
-	\renewcommand*{\labNum}{#1}
-	\renewcommand*{\labName}{#2}
-	\renewcommand*{\dateStart}{#3}
-	\renewcommand*{\studentCourse}{#4}
-	\renewcommand*{\studentGroup}{#5}
-	\renewcommand*{\studentName}{#6}
-	\makeTitlepageInner
+\newcommand*{\makeTitlepageOther}[7][]{%
+	\renewcommand*{\labNum}{#2}
+	\renewcommand*{\labName}{#3}
+	\renewcommand*{\dateStart}{#4}
+	\renewcommand*{\studentCourse}{#5}
+	\renewcommand*{\studentGroup}{#6}
+	\renewcommand*{\studentName}{#7}
+	\makeTitlepageInner[#1]
 }
 
-\newcommand*{\makeTitlepageInner}{%
+\newif\ifneedsdates
+\needsdatestrue
+\newif\ifneedsgroup
+\needsdatestrue
+
+\newcommand*{\makeTitlepageInner}[1][0.5\textwidth]{%
 	\hspace*{\fill}%
-	\begin{minipage}{0.50\textwidth}
+	\begin{minipage}{#1}
 		\begin{tabular}{@{}l@{ }l@{}}
 			\multicolumn{2}{@{}l}{\studentName}\\
-			\multicolumn{2}{@{}l}{\studentCourse{} курс, группа \studentGroup}%
+			\multicolumn{2}{@{}l}{%
+				\studentCourse{} курс%
+				\ifneedsgroup
+					,
+					группа \studentGroup
+				\fi
+			}%
 			%\\[1\baselineskip]
 			%Отметка: \hrulefill\par
 			%\\[1\baselineskip]
 			\\
-			Дата выполнения: & \dateStart \\
-			Дата составления: & \dateFin
+			\ifneedsdates
+				Дата выполнения: & \dateStart \\
+				Дата составления: & \dateFin
+			\fi
 		\end{tabular}
 		\par
 		% \bigskip
