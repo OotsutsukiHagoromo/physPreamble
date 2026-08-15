@@ -4,8 +4,7 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[main=russian,latin,english,czech]{babel}
 \RequirePackage{indentfirst}
-\RequirePackage[intlimits]{amsmath}
-\RequirePackage{amssymb}
+\RequirePackage[intlimits]{amsmath} \RequirePackage{amssymb}
 \RequirePackage[shortlabels]{enumitem}
 
 \RequirePackage{xypic}
@@ -115,8 +114,8 @@
 % \tcbuselibrary{breakable}
 
 
-% \RequirePackage{pdflscape}
-\usepackage{lscape}
+\RequirePackage{pdflscape}
+% \usepackage{lscape}
 
 % \RequirePackage[libertine]{newtxmath}		% Здесь есть крупный оператор произведения
 
@@ -821,6 +820,9 @@
 \definecolor{proofcolorb}{HTML}{9B2226}
 \definecolor{proofcolore}{HTML}{0A9396}
 
+\colorlet{attOne}{proofcolorb}
+\colorlet{attTwo}{proofcolore}
+
 % \definecolor{proofcolorb}{HTML}{000000}
 % \definecolor{proofcolore}{HTML}{000000}
 
@@ -956,6 +958,15 @@
 	}%
 }
 
+\let\braket=\undefined
+\newcommand*{\braket}[3][]{%
+	\bracketoperatorthree[#1]{<}{|}{>}{#2}{#3}%
+}
+
+\newcommand*{\bracket}[4][]{%
+	\bracketoperatorfour[#1]{<}{|}{|}{>}{#2}{#3}{#4}%
+}
+
 \newcommand*{\conj}[1]{\overline{#1}}
 
 \AtBeginDocument{\allowdisplaybreaks}
@@ -1087,5 +1098,25 @@
 	\renewcommand*{\theequation}{\thesection.\arabic{equation}}
 	\makeatother
 \fi
+
+% =============================================================================
+% Команды
+
+\newcommand*{\id}{\mathop{\mathrm{id}}\nolimits}
+
+\newcommand*{\downarrowop}{%
+	\mathbin{\downarrow}%
+}
+
+\newcommand*{\commacat}[2]{%
+	\left(
+		#1
+		\downarrowop
+		#2
+	\right)
+}
+
+\newcommand*{\Mor}{\mathop{\mathrm{Mor}}}
+\newcommand*{\Ob}{\mathop{\mathrm{Ob}}}
 
 % vim:ts=2:sw=2
