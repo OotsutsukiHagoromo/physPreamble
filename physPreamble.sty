@@ -115,8 +115,8 @@
 % \tcbuselibrary{breakable}
 
 
-\RequirePackage{pdflscape}
-% \usepackage{lscape}
+% \RequirePackage{pdflscape}
+\usepackage{lscape}
 
 % \RequirePackage[libertine]{newtxmath}		% Здесь есть крупный оператор произведения
 
@@ -821,9 +821,6 @@
 \definecolor{proofcolorb}{HTML}{9B2226}
 \definecolor{proofcolore}{HTML}{0A9396}
 
-\colorlet{attOne}{proofcolorb}
-\colorlet{attTwo}{proofcolore}
-
 % \definecolor{proofcolorb}{HTML}{000000}
 % \definecolor{proofcolore}{HTML}{000000}
 
@@ -957,15 +954,6 @@
 		#4
 		\csname #1r\endcsname \rangle
 	}%
-}
-
-\let\braket=\undefined
-\newcommand*{\braket}[3][]{%
-	\bracketoperatorthree[#1]{<}{|}{>}{#2}{#3}%
-}
-
-\newcommand*{\bracket}[4][]{%
-	\bracketoperatorfour[#1]{<}{|}{|}{>}{#2}{#3}{#4}%
 }
 
 \newcommand*{\conj}[1]{\overline{#1}}
