@@ -1,6 +1,6 @@
 \ProvidesPackage{physPreamble}
 
-\RequirePackage[T2A]{fontenc}
+\RequirePackage[T2A,T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[russian]{babel}
 \RequirePackage{indentfirst}
@@ -20,6 +20,13 @@
 \definecolor{mygreen}{HTML}{9B2226}
 \definecolor{myred}{HTML}{0A9396}
 
+% https://coolors.co/18206f-17255a-00635d-08a4bd-bd1e1e
+\definecolor{MidnightBlue}{HTML}{18206f}
+\definecolor{PennBlue}{HTML}{17255a}
+\definecolor{CaribbeanCurrent}{HTML}{00635d}
+\definecolor{Moonstone}{HTML}{08a4bd}
+\definecolor{CornellRed}{HTML}{bd1e1e}
+
 \RequirePackage{hyperref}
 
 \hypersetup{%
@@ -29,12 +36,13 @@
 	breaklinks,
 }
 
-\renewcommand*{\UrlFont}{\sfshape}
+%\renewcommand*{\UrlFont}{\sfshape}
+\urlstyle{sf}
 
-\RequirePackage{cleveref}
+\RequirePackage[nameinlink, russian]{cleveref}
 %\renewcommand*{\equationautorefname}{}
 
-\usepackage{minted}
+% \usepackage{minted}
 
 % =============================================================================
 
@@ -272,7 +280,7 @@
 % ==========
 
 \usepackage[libertine,vvarbb]{newtx}
-\usepackage[protrusion=true]{microtype}
+\usepackage[protrusion=true, factor=2000, babel=true]{microtype}
 
 % ==========
 
@@ -635,8 +643,11 @@
 % \AtEndDocument{\makeSignature}
 %\AtVeryEndDocument{\makeSignature}
 
-\definecolor{proofcolorb}{HTML}{9B2226}
-\definecolor{proofcolore}{HTML}{0A9396}
+% \definecolor{proofcolorb}{HTML}{9B2226}
+% \definecolor{proofcolore}{HTML}{0A9396}
+
+\definecolor{proofcolorb}{HTML}{000000}
+\definecolor{proofcolore}{HTML}{000000}
 
 \newcommand*{\prooftextb}{Непон}
 \newcommand*{\prooftexte}{Пон}
@@ -660,30 +671,33 @@
 \newcommand*{\proofe}{\textcolor{proofcolore}{$\blacktriangleright$}}
 
 \newenvironment*{proof}{%
-    %\addvspace{\bigskipamount}%
+    \addvspace{\medskipamount}%
     \par%
-	\noindent%
-    %\makebox[0pt][r]{\ensuremath{\blacktriangleleft}\ }%
-    \proofb{}
-		%\hspace{-\spaceskip}%
+		%\noindent%
+    \makebox[0pt][r]{\proofb\ }%
+		%\hspace{-2\spaceskip}%
+    %\proofb{}
 }{%
     %\ \ensuremath{\blacktriangleright}
     ~%
     \proofe
     \par%
-    \addvspace{\bigskipamount}%
+    \addvspace{\medskipamount}%
 }
 
 \newenvironment*{proofm}{%
+    \addvspace{\medskipamount}%
     \par%
+		\indent
     %\indent%
-    \noindent%
+    %\noindent%
+    \makebox[0pt][r]{\proofb\ }%
     %\makebox[0pt][r]{\ensuremath{\blacktriangleleft}\ }%
-    \proofb{}
+    %\proofb{}
 		%\hspace{-\spaceskip}%
 }{%
     \par%
-    \addvspace{\bigskipamount}%
+    \addvspace{\medskipamount}%
 }
 
 %\newcommand*{\proofmark}{\tag*{$\blacktriangleright$}}
@@ -777,15 +791,94 @@
 	\addvspace{1\baselineskip}%
 }
 
-\newcommand*{\textstars}{%
-	\par
-	\[*\ *\ *\]%
-	\par
-}
+% \newcommand*{\textstars}{%
+% 	\[*\ *\ *\]%
+% 	\par
+% }
 
+\newlength{\textstarsverticallength}
+%\setlength{\textstarsverticallength}{1em minus 0.3em}
+%\setlength{\textstarsverticallength}{%
+%	2.0ex
+%	%plus  1ex
+%	%minus 1\baselineskip
+%}
+\setlength{\textstarsverticallength}{0.79\baselineskip}
+
+\newcommand*{\textstars}{%
+	\begingroup
+		\setlength{\parskip}{0pt}%
+		\setlength{\parindent}{0pt}%
+		\par
+		\addpenalty{10000}%
+		\addvspace{\textstarsverticallength}%
+		\vbox{%
+			%\hbox{%
+			%	\rule{\textstarsverticallength}{\textstarsverticallength}%
+			%}
+			\hbox to \linewidth {%
+				\hfill
+				\raisebox{0pt}[0pt][0pt]{%
+					%\ensuremath{-\ *\ *\ *\ -}%
+					\ensuremath{*\ *\ *}%
+				}%
+				\hfill
+			}
+			%\hbox{%
+			% \rule{\textstarsverticallength}{\textstarsverticallength}%
+			%}%
+		}%
+		\par
+		%\addpenalty{10000}%
+		\addvspace{\textstarsverticallength}%
+		%\vspace{\textstarsverticallength}%
+	\endgroup
+}
 \newcommand*{\vbracketleft}[3]{%
 	\raisebox{#2}{$\left#1\vphantom{\rule{0pt}{#3}}\right.$\!}
 }
 \newcommand*{\vbracketright}[3]{%
 	\raisebox{#2}{\!$\left.\vphantom{\rule{0pt}{#3}}\right#1$}
 }
+
+
+\newcommand*{\pdvb}[4][]{%
+	\bound[#1]{
+		\pdv{#2}{#3}
+	}_{#4}
+}
+
+\newcommand*{\dpdvb}[4][]{%
+	\bound[#1]{
+		\displaystyle
+		\pdv{#2}{#3}
+	}_{#4}
+}
+
+\newcommand*{\jcb}[4]{%
+	\pdv{\left( #1, #2 \right)}{\left( #3, #4 \right)}%
+}
+
+\newcommand*{\jcbd}[4]{%
+	\abs{%
+		\jcb{#1}{#2}{#3}{#4}%
+	}%
+}
+
+\newcommand*{\jcbdfull}[4]{%
+	\left|
+	\begin{matrix}
+		\displaystyle
+		\pdvb{#1}{#3}{#4} & 
+		\displaystyle
+		\pdvb{#1}{#4}{#3} 
+		\\
+		\displaystyle
+		\pdvb{#2}{#3}{#4} &
+		\displaystyle
+		\pdvb{#2}{#4}{#3}
+	\end{matrix}
+	\right|
+}
+
+\newcommand{\att}[1]{{\color{CornellRed}#1}}
