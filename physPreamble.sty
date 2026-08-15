@@ -2,49 +2,23 @@
 
 \RequirePackage[T2A,T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
-\RequirePackage[russian]{babel}
+\RequirePackage[main=russian,latin,english,czech]{babel}
 \RequirePackage{indentfirst}
 \RequirePackage[intlimits]{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage[shortlabels]{enumitem}
 
+\RequirePackage{xypic}
+\RequirePackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\RequirePackage{preambleColors}
+\RequirePackage{preambleReferences}
+
 % =============================================================================
-%
-\RequirePackage{xcolor}
-
-\definecolor{myurlcolor}{HTML}{00304A}
-\definecolor{mylinkcolor}{HTML}{00304A}
-\definecolor{myaccentcolor}{HTML}{9B2226}
-
-\definecolor{myblue}{HTML}{264b89}
-\definecolor{mygreen}{HTML}{9B2226}
-\definecolor{myred}{HTML}{0A9396}
-
-% https://coolors.co/18206f-17255a-00635d-08a4bd-bd1e1e
-\definecolor{MidnightBlue}{HTML}{18206f}
-\definecolor{PennBlue}{HTML}{17255a}
-\definecolor{CaribbeanCurrent}{HTML}{00635d}
-\definecolor{Moonstone}{HTML}{08a4bd}
-\definecolor{CornellRed}{HTML}{bd1e1e}
-
-\RequirePackage{hyperref}
-
-\hypersetup{%
-	colorlinks=true,
-	linkcolor=myblue,
-	urlcolor=mygreen,
-	breaklinks,
-}
-
-%\renewcommand*{\UrlFont}{\sfshape}
-\urlstyle{sf}
-
-\RequirePackage[nameinlink, russian]{cleveref}
-%\renewcommand*{\equationautorefname}{}
 
 % \usepackage{minted}
-
-% =============================================================================
 
 %\RequirePackage[libertine]{newtxmath}
 % \RequirePackage[math]{pscyr}		% TODO: стандартные
@@ -52,7 +26,6 @@
 %\RequirePackage{concrete}
 
 %\RequirePackage{tikz}
-\RequirePackage{xypic}
 
 % «Умная» запятая: $0,2$ --- число, $0, 2$ --- перечисление
 % \RequirePackage{icomma}
@@ -85,8 +58,6 @@
 % \DeclareMathAlphabet{\mathtud}{OT1}{tud}{m}{it}
 % \DeclareSymbolFont{DejaVuSerif}{OT1}{}{m}{it}
 % \renewcommand*{\mathrm}{\mathdjs}
-
-% \linespread{1.04}  % !!!
 
 % % \RequirePackage[cal=boondoxo]{mathalfa}
 % 
@@ -127,7 +98,6 @@
 %\RequirePackage{mathtext}
 %\RequirePackage{multicol}
 %\RequirePackage[]{}
-%\DeclareSymbolFont{T2Aletters}{\encodingdefault}{\rmdefault}{m}{it}
 \RequirePackage{wrapfig}
 \RequirePackage{atveryend}
 \RequirePackage{csvsimple}
@@ -135,20 +105,35 @@
 \RequirePackage{float}
 \RequirePackage{placeins}
 
-\usepackage{pdflscape}
+\RequirePackage{pdflscape}
 %\usepackage{lscape}
 
 % \RequirePackage[libertine]{newtxmath}		% Здесь есть крупный оператор произведения
 
 \graphicspath{{Pics/}}
 
-% TODO
-\geometry{%
-	a4paper,
-	margin=0.9in,
-	footskip=0.4in,
-	includefoot
-}
+\newif\ifpreambleafourpaper
+\preambleafourpapertrue
+
+\newif\ifpreambleafivepaper
+\preambleafivepaperfalse
+
+\ifpreambleafourpaper
+	% TODO
+	\geometry{%
+		a4paper,
+		margin=0.9in,
+		% margin=0.7in,
+		footskip=0.4in,
+		includefoot
+	}
+\else\ifpreambleafivepaper
+	\geometry{%
+		a5paper,
+		margin=1cm,
+		includefoot
+	}
+\fi\fi
 
 %\renewcommand*{\rmdefault}{fjn}		% TODO: стандартные
 %\DeclareSymbolFont{operators}{OT1}{fjn}{m}{n}
@@ -186,8 +171,9 @@
 
 \newlength{\picwidth}
 \setlength{\picwidth}{\linewidth}
+\newlength{\wrappicwidth}
+\setlength{\wrappicwidth}{0.4\linewidth}
 
-% 
 \newcommand{\insertfigure}[4][\picwidth]{%
 	\begin{figure}[h]
 		\centering
@@ -239,8 +225,7 @@
 		\captionsetup{type=#7}
 		%\begin{minipage}{picwidth}
 		\gdef\svgwidth{1\linewidth}%
-		\input{#4}%
-		%\end  {minipage}%
+		\input{#4}% \end  {minipage}%
 		\par
 		%\captionof{#7}{#5}%
 		\protect\caption{#5}%
@@ -248,7 +233,7 @@
 	\end{wrapfigure}%
 }
 
-
+% ================================== Шрифты ===================================
 
 % \usepackage{heuristica}
 % \usepackage[heuristica,vvarbb,bigdelims]{newtxmath}
@@ -260,37 +245,77 @@
 % %\usepackage{mathptmx}
 % \usepackage{tempora}
 
-% ============= Шрифты
+% \DeclareSymbolFont{T2Aletters}{\encodingdefault}{\rmdefault}{m}{it}
 
-% % osf in text, lining figures in math
-% %\usepackage[scaled=.98,sups,osf]{XCharter}
-% \usepackage[scaled=.98,sups]{XCharter}
+\newif\ifpreamblefontXCharter
+\newif\ifpreamblefontTimes
+\newif\ifpreamblefontCochineal
+
+\preamblefontTimestrue
+\preamblefontXCharterfalse
+\preamblefontCochinealfalse
+
+\ifpreamblefontXCharter
+	% osf in text, lining figures in math
+	%\usepackage[scaled=.98,sups,osf]{XCharter}
+	% \usepackage[scaled=.98,sups]{XCharter}
+
+	% \usepackage[scaled=.98]{XCharter}
+
+	% inconsolata typewriter
+	\usepackage[scaled=1.04,varqu,varl]{inconsolata}
+
+	% sans serif
+	%\usepackage[type1]{cabin}
+
+	% \usepackage[cal=boondoxo]{mathalfa}
+
+	\usepackage[charter,vvarbb,scaled=1.05]{newtx}
+	\linespread{1.04}
+	% \renewcommand*{\ttdefault}{\sfdefault}
+\fi
+\ifpreamblefontTimes
+	%\usepackage[libertine,vvarbb,scaled=1.05]{newtxmath}
+	\usepackage[libertinus, vvarbb, varg]{newtx}
+	\AtBeginDocument{%
+		\DeclareFontFamilySubstitution{T2A}{\scdefault}{Tempora-TLF}%
+	}
+\fi
+\ifpreamblefontCochineal
+	\usepackage[scaled=1.02]{cochineal}
+	\usepackage[cochineal,vvarbb]{newtxmath}
+\fi
+
+% ============================================================================
+
+% ===============================	Typesetting ================================
+
+\RequirePackage{tocloft}
+\RequirePackage{fnpct}
+\RequirePackage[%
+	kerning=true,
+	spacing=true,
+	protrusion=true,
+	babel=true,
+	factor=1000
+]{microtype}
+
+ \RequirePackage{enumitem}
+% \RequirePackage{enumerate}
+\RequirePackage[shortlabels]{enumitem}
+
+% =============================================================================
+
+% \usepackage{minted}
 % 
-% \usepackage[scaled=.98]{XCharter}
-% 
-% % inconsolata typewriter
-% \usepackage[scaled=1.04,varqu,varl]{inconsolata}
-% 
-% % sans serif
-% %\usepackage[type1]{cabin}
-% 
-% \usepackage[charter,vvarbb,scaled=1.05]{newtxmath}
-% %\usepackage[libertine,vvarbb,scaled=1.05]{newtxmath}
-% \usepackage[cal=boondoxo]{mathalfa}
+% % \usemintedstyle{lovelace}
+% \newmintinline[code]{cpp}{breaklines,breakanywhere,style=lovelace}
+% \newmintinline[tcode]{text}{breaklines,breakanywhere,style=lovelace}
+% \newminted{cpp}{xleftmargin=\parindent, breaklines, breakanywhere, style=lovelace, autogobble, mathescape, linenos=true, tabsize=4}
+% !!! по эту  и раскомментируй следующую:
+% \newcommand*{\tcode}[1]{\textsf{#1}}
 
-% ==========
-
-% \usepackage[libertine,vvarbb]{newtx}
-% \usepackage[libertine, varb, varg]{newtx}
-\usepackage[libertinus, vvarbb, varg]{newtx}
-\AtBeginDocument{%
-  \DeclareFontFamilySubstitution{T2A}{\scdefault}{Tempora-TLF}%
-}
-\usepackage[protrusion=true, factor=2000, babel=true]{microtype}
-
-% ==========
-
-% \usepackage{microtype}
+% =============================================================================
 
 \RequirePackage{bm}
 
@@ -300,12 +325,6 @@
 \newcommand*{\np}[1]{\numprint{#1}}
 %\newcommand*{\fromto}[2]{\overline{#1,\,#2}}
 
-\renewcommand*{\figureautorefname}{рис.}
-\renewcommand*{\tableautorefname}{табл.}
-\newcommand*{\picref}[1]{рис.\,\ref{#1}}
-\newcommand*{\tabref}[1]{табл.\,\ref{#1}}
-\renewcommand*{\picref}[1]{\autoref{#1}}
-\renewcommand*{\tabref}[1]{\autoref{#1}}
 
 \newcommand*{\Cel}{\ensuremath{{}^{\circ} \text{C}}}
 %\newcommand*{\const}{\mathrm{const}}
@@ -366,162 +385,7 @@
 % 	}%
 % }
 
-\newif\ifmyautobracketmodes
-\myautobracketmodesfalse
-
-\newif\ifaddspace
-\addspacetrue
- 
-\newcommand*{\myleftbracketmode}  {\relax}
-\newcommand*{\mymiddlebracketmode}{\relax}
-\newcommand*{\myrightbracketmode} {\relax}
-
-\newcommand*{\setmybracketmodes}[1]{%
-	\ifthenelse{\equal{#1}{}}{%
-		\addspacetrue
-		\myautobracketmodestrue
-	}{%
-		\addspacefalse
-		\myautobracketmodesfalse
-	}%
-	%
-	% \ifmyautobracketmodes
-	% 	\let\myleftbracketmode={\csname left\endcsname}
-	% 	\let\mymiddlebracketmode={\csname middle\endcsname}
-	% 	\let\myrightbracketmode={\csname right\endcsname}
-	% \else
-	% 	\let\myleftbracketmode={\csname #1l\endcsname}
-	% 	\let\mymiddlebracketmode={\csname #1m\endcsname}
-	% 	\let\myrightbracketmode={\csname #1r\endcsname}
-	% \fi
-	\renewcommand*{\myleftbracketmode}{%
-		\ifmyautobracketmodes
-			\csname left\endcsname
-		\else
-			\expandafter
-			\expandafter
-			\csname #1l\endcsname
-		\fi
-	}%
-	%
-	\renewcommand*{\mymiddlebracketmode}{%
-		\ifmyautobracketmodes
-			\csname middle\endcsname
-		\else
-			\expandafter
-			\expandafter
-			\csname #1m\endcsname
-		\fi
-	}%
-	%
-	\renewcommand*{\myrightbracketmode}{%
-		\ifmyautobracketmodes
-			\csname right\endcsname
-		\else
-			\expandafter
-			\expandafter
-			\csname #1r\endcsname
-		\fi
-	}%
-}
-
-\newcommand*{\mybraceaddspace}{\;}
-
-%       1  2  3  4
-% [размер]{<}{>}{a}
-\newcommand*{\bracketoperator}[4][]{%
-	\setmybracketmodes{#1}
-	\myleftbracketmode#2
-		#4
-	\myrightbracketmode#3
-}
-
-%       1  2  3  4  5  6
-% [размер]{<}{|}{>}{a}{b}
-\newcommand*{\bracketoperatorthree}[6][]{%
-	\setmybracketmodes{#1}
-	\myleftbracketmode#2
-		#5%
-	\ifaddspace\mybraceaddspace\fi
-	\mymiddlebracketmode#3%
-	\ifaddspace\mybraceaddspace\fi
-		#6%
-	\myrightbracketmode#4
-}
-
-%       1  2  3  4  5  6  7  8
-% [размер]{<}{|}{|}{>}{a}{b}{c}
-\newcommand*{\bracketoperatorfour}[8][]{%
-	\setmybracketmodes{#1}
-	\myleftbracketmode#2
-		#6%
-	\ifaddspace \mybraceaddspace \fi
-	\mymiddlebracketmode#3
-	\ifaddspace \mybraceaddspace \fi
-		#7
-	\ifaddspace \mybraceaddspace \fi
-	\mymiddlebracketmode#4
-	\ifaddspace \mybraceaddspace \fi
-		#8%
-	\myrightbracketmode#5
-}
-
-% =============================================================================
-
-\let\norm=\undefined
-\newcommand*{\norm}[2][]{%
-	\bracketoperator[#1]{\|}{\|}{#2}%
-}
-
-\newcommand*{\mean}[2][]{%
-	\bracketoperator[#1]{\langle}{\rangle}{#2}%
-}
-
-\newcommand*{\bound}[2][]{%
-	\bracketoperator[#1]{.}{|}{#2}%
-}
-
-% =============================================================================
-
-\newcommand*{\set}{\@ifstar\@set@one\@set@two}
-\newcommand*{\@set@one}[2][]{%
-	\ensuremath{%
-		\bracketoperator[#1]{\{}{\}}{#2}%
-	}%
-}
-\newcommand*{\@set@two}[3][]{%
-	\ensuremath{%
-		\bracketoperatorthree[#1]{\{}{|}{\}}{#2}{#3}%
-	}%
-}
-
-
-\newcommand*{\setsp}{\@ifstar\@setsp@one\@setsp@two}
-\newcommand*{\@setsp@one}[2][]{%
-	\ensuremath{%
-		\bracketoperator[#1]{<}{>}{#2}%
-	}%
-}
-\newcommand*{\@setsp@two}[3][]{%
-	\ensuremath{%
-		\bracketoperatorthree[#1]{<}{|}{>}{#2}{#3}%
-	}%
-}
-
-\newcommand*{\spset}{\setsp}
-
-
-\newcommand*{\setord}{\@ifstar\@setord@one\@setord@two}
-\newcommand*{\@setord@one}[2][]{%
-	\ensuremath{%
-		\bracketoperatorthree[#1]{(}{)}{#2}%
-	}%
-}
-\newcommand*{\@setord@two}[3][]{%
-	\ensuremath{%
-		\bracketoperatorthree[#1]{(}{|}{)}{#2}{#3}%
-	}%
-}
+\RequirePackage{bracketoperator}
 
 % \newcommand*{\setsp}{\@ifstar\@setsp@one\@setsp@two}
 % \newcommand*{\@setsp@one}[1]{\ensuremath{\left< #1 \right>}}
@@ -817,11 +681,123 @@
 % \AtEndDocument{\makeSignature}
 %\AtVeryEndDocument{\makeSignature}
 
-% \definecolor{proofcolorb}{HTML}{9B2226}
-% \definecolor{proofcolore}{HTML}{0A9396}
+% =============================================================================
 
-\definecolor{proofcolorb}{HTML}{000000}
-\definecolor{proofcolore}{HTML}{000000}
+\newlength{\betweenmeta}
+\setlength{\betweenmeta}{\medskipamount}
+
+\newenvironment*{metablock}{%
+	\par%
+	\addvspace{\medskipamount}%
+}{%
+	\par%
+	\addvspace{\medskipamount}%
+}
+
+\newenvironment*{metaquestion}[1]{%
+	\begin{metablock}%
+		\textbf{#1.}\ %
+}{%
+	\end{metablock}%
+}
+
+\newcommand*{\metaname}{}
+\newcommand*{\metanametext}{}
+\newcommand*{\metaadditionaltext}{}
+
+\newcommand*{\makemetaquestion}[2]{%
+	\newenvironment*{#1}{%
+		\begin{metaquestion}{#2}%
+	}{%
+		\end{metaquestion}%
+	}%
+}
+
+\newcommand*{\makemetaquestionsmalltext}[2]{%
+	\newenvironment*{#1}{%
+		\begingroup
+		\footnotesize
+		\begin{metaquestion}{#2}%
+	}{%
+		\end{metaquestion}%
+		\endgroup
+	}%
+}
+
+\makemetaquestionsmalltext{question}{Вопрос}
+\makemetaquestionsmalltext{exercise}{Задача}
+\makemetaquestionsmalltext{exercize}{Задача}
+\makemetaquestionsmalltext{exersize}{Задача}
+\makemetaquestionsmalltext{task}{Задача}
+\makemetaquestionsmalltext{note}{Замечание}
+\makemetaquestion{statement}{Утверждение}
+\makemetaquestion{proposition}{Утверждение}
+\makemetaquestion{definition}{Определение}
+%\makemetaquestion{solution}{Решение}
+\makemetaquestion{remark}{Замечание}
+%\makemetaquestion{answer}{Ответ}
+
+\newcounter{theorem}[section]
+\renewcommand*{\thetheorem}{\arabic{section}.\arabic{theorem}}
+
+\newenvironment{metatheorem}[2][]{%
+	\refstepcounter{theorem}%
+	\begin{metablock}%
+		{\bfseries
+			#2~\thetheorem
+			\ifthenelse{\equal{#1}{}}{}{ (#1)}%
+		.}\ %
+		\slshape%
+}{%
+		\par\normalfont
+	\end{metablock}%
+}
+
+\newcommand*{\makemetatheorem}[2]{%
+	\renewcommand*{\metaname}{#1}%
+	\renewcommand*{\metanametext}{#2}%
+	\makemetatheorembuild
+	\renewcommand*{\metaname}{}%
+	\renewcommand*{\metanametext}{}%
+}
+
+% \newcommand*{\makemetatheorembuild}{%
+% 	\newenvironment*{\metaname}[1][]{%
+% 		\begin{metatheorem}[##1]{\metanametext}%
+% 	}{%
+% 		\end{metatheorem}%
+% 	}%
+% }
+
+% \makemetatheorem{theorem}{Теорема}
+% \makemetatheorem{lemma}{Лемма}
+% \makemetatheorem{corrolary}{Следствие}
+
+\newenvironment*{theorem}[1][]{%
+	\begin{metatheorem}[#1]{Теорема}%
+}{%
+	\end{metatheorem}%
+}%
+
+\newenvironment*{lemma}[1][]{%
+	\begin{metatheorem}[#1]{Лемма}%
+}{%
+	\end{metatheorem}%
+}%
+
+\newenvironment*{corrolary}[1][]{%
+	\begin{metatheorem}[#1]{Следствие}%
+}{%
+	\end{metatheorem}%
+}%
+
+% =============================================================================
+
+\definecolor{proofcolorb}{HTML}{9B2226}
+\definecolor{proofcolore}{HTML}{0A9396}
+
+% \definecolor{proofcolorb}{HTML}{000000}
+% \definecolor{proofcolore}{HTML}{000000}
 
 \newcommand*{\prooftextb}{Непон}
 \newcommand*{\prooftexte}{Пон}
@@ -844,39 +820,42 @@
 \newcommand*{\proofb}{\textcolor{proofcolorb}{$\blacktriangleleft$}}
 \newcommand*{\proofe}{\textcolor{proofcolore}{$\blacktriangleright$}}
 
-\newenvironment*{proof}{%
-    \addvspace{\medskipamount}%
-    \par%
-		%\noindent%
-    \makebox[0pt][r]{\proofb\ }%
-		%\hspace{-2\spaceskip}%
-    %\proofb{}
+\newif\ifmanualendtag
+\manualendtagfalse
+
+\newenvironment{proofinner}{%
+	\addvspace{\medskipamount}%
+	\par
+	\indent
+	\makebox[0pt][r]{\proofb\ }%
+	\ignorespaces
 }{%
-    %\ \ensuremath{\blacktriangleright}
-    ~%
-    \proofe
-    \par%
-    \addvspace{\medskipamount}%
+	\ifhmode\unskip\fi
+	\ifmanualendtag\else
+		\ \proofe
+	\fi
+	\par
+	\addvspace{\medskipamount}%
+}
+
+\newenvironment*{proof}{%
+	\manualendtagfalse
+	\begin{proofinner}%
+}{%
+	\end{proofinner}%
 }
 
 \newenvironment*{proofm}{%
-    \addvspace{\medskipamount}%
-    \par%
-		\indent
-    %\indent%
-    %\noindent%
-    \makebox[0pt][r]{\proofb\ }%
-    %\makebox[0pt][r]{\ensuremath{\blacktriangleleft}\ }%
-    %\proofb{}
-		%\hspace{-\spaceskip}%
+	\manualendtagtrue
+	\begin{proofinner}%
 }{%
-    \par%
-    \addvspace{\medskipamount}%
+	\end{proofinner}%
 }
 
 %\newcommand*{\proofmark}{\tag*{$\blacktriangleright$}}
 \newcommand*{\proofmark}{\tag*{\proofe}}
 
+% =============================================================================
 
 \let\savediv=\div
 \renewcommand*{\div}{\operatorname{div}}
@@ -887,12 +866,12 @@
 
 \newcommand*{\holds}{\suchthat}
 
-\renewcommand*{\gcd}[2]{%
-	\mathop{\text{нод}}%
-	\left( #1,\,#2 \right)
+\renewcommand*{\gcd}[1]{%
+	\mathop{\text{НОД}}%
+	\left( #1 \right)
 }
 \renewcommand*{\nok}[1]{%
-	\mathop{\text{нок}}%
+	\mathop{\text{НОК}}%
 	\left( #1 \right)
 }
 
@@ -957,12 +936,12 @@
 \AtBeginDocument{\allowdisplaybreaks}
 
 \newenvironment{example}{%
+	\addvspace{\medskipamount}%
 	\par
-	\addvspace{1\baselineskip}%
 	\textbf{Пример.}
 }{%
 	\par
-	\addvspace{1\baselineskip}%
+	\addvspace{\medskipamount}%
 }
 
 % \newcommand*{\textstars}{%
@@ -997,7 +976,7 @@
 					\ensuremath{*\ *\ *}%
 				}%
 				\hfill
-			}
+			}%
 			%\hbox{%
 			% \rule{\textstarsverticallength}{\textstarsverticallength}%
 			%}%
@@ -1056,5 +1035,32 @@
 }
 
 \newcommand{\att}[1]{{\color{CornellRed}#1}}
+
+\newcommand*{\decr}[1]{%
+	\underline{#1}%
+}
+
+\newcommand*{\incr}[1]{%
+	\overline{#1}%
+}
+
+\newenvironment{addition}{%
+	\par
+	\bigskip
+	\small
+}{%
+	\normalfont
+	\par
+	\bigskip
+}
+
+\newif\ifresetequations
+\resetequationstrue
+\ifresetequations
+	\makeatletter
+	\@addtoreset{equation}{section}
+	\renewcommand*{\theequation}{\thesection.\arabic{equation}}
+	\makeatother
+\fi
 
 % vim:ts=2:sw=2
