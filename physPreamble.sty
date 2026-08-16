@@ -1,0 +1,127 @@
+% Преамбула для отчётов по лабораторным по физике
+\ProvidesPackage{physPreamble}
+
+\RequirePackage[T2A]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[russian]{babel}
+\RequirePackage{indentfirst}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+%\RequirePackage[libertine]{newtxmath}
+\RequirePackage{pscyr}
+\RequirePackage{geometry}
+\RequirePackage{array}
+\RequirePackage{multicol}
+\RequirePackage{numprint}
+\RequirePackage{enumerate}
+\RequirePackage{graphicx}
+\RequirePackage{bm}
+\RequirePackage{longtable}
+%\RequirePackage{mathtext}
+%\RequirePackage{multicol}
+%\RequirePackage[]{}
+%\DeclareSymbolFont{T2Aletters}{\encodingdefault}{\rmdefault}{m}{it}
+\RequirePackage{wrapfig}
+\RequirePackage{atveryend}
+\RequirePackage{csvsimple}
+
+\graphicspath{{/Pics}}
+
+\geometry{a4paper, margin=1in}
+\renewcommand*{\rmdefault}{fjn}
+
+\renewcommand*{\geq}{\geqslant}
+\renewcommand*{\leq}{\leqslant}
+\newcommand*{\Lra}{\Longrightarrow}
+\newcommand*{\np}[1]{\numprint{#1}}
+\newcommand*{\fromto}[2]{\overline{#1,\,#2}}
+\newcommand*{\picref}[1]{рис.~\ref{#1}}
+\newcommand*{\tabref}[1]{табл.~\ref{#1}}
+\newcommand*{\Cel}{\ensuremath{{}^{\circ} C}}
+\DeclareMathOperator{\const}{const}
+
+
+\newenvironment{system}{\left\{\begin{aligned}}{\end{aligned}\right.}
+\newenvironment{system*}{\left.\begin{aligned}}{\end{aligned}\right\}}
+\newenvironment{union}{\left[\begin{aligned}}{\end{aligned}\right.}
+
+\newcommand*{\labNum}{Номер работы}
+\newcommand*{\labName}{Название работы}
+\newcommand*{\dateStart}{Дата начала}
+\newcommand*{\dateFin}{\today}
+\newcommand*{\studentCourse}{1}
+\newcommand*{\studentGroup}{Б--05}
+\newcommand*{\studentName}{Лавникович~Р.~В.}
+
+\newcommand*{\D}{\Delta}
+\newcommand*{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand*{\dpd}[2]{\dfrac{\partial #1}{\partial #2}}
+
+\newcommand*{\emptyrule}{\rule{0pt}{0pt}}
+\newcommand*{\ND}{\ensuremath{\text{---}}}
+
+\newcommand*{\physb}[3]{\left(\np{#1} \pm \np{#2}\right)\ #3}
+\newcommand*{\phys}[2]{\np{#1} \pm \np{#2}}
+
+
+\newcommand*{\mcols}[2][7]{\hline\multicolumn{#1}{|c|}{#2}\\\hline}
+
+\renewcommand*{\phi}{\varphi}
+\renewcommand*{\epsilon}{\varepsilon}
+\newcommand*{\eps}{\epsilon}
+
+\newcommand*{\makeTitlepage}[3]{%
+	\renewcommand*{\labNum}{#1}
+	\renewcommand*{\labName}{#2}
+	\renewcommand*{\dateStart}{#3}
+	\makeTitlepageInner
+}
+
+\newcommand*{\makeTitlepageOther}[5]{%
+	\renewcommand*{\labNum}{#1}
+	\renewcommand*{\labName}{#2}
+	\renewcommand*{\dateStart}{#3}
+	%\newcommand*{\studentCourse}{1}
+	\renewcommand*{\studentGroup}{#4}
+	\renewcommand*{\studentName}{#5}
+	\makeTitlepageInner
+}
+
+\newcommand*{\makeTitlepageInner}{%
+	\hspace*{\fill}%
+	\begin{minipage}{0.33\textwidth}
+		\dateStart\\
+		\studentName\\
+		\studentCourse{} курс, группа \studentGroup\\[1\baselineskip]
+		Отметка: \hrulefill\par
+	\end  {minipage}
+	\vspace{30pt}
+	\begin{center}
+		\bfseries
+		\Large
+		Лабораторная работа №~\labNum\\[0.5\baselineskip]
+		\large
+		<<\labName>>
+	\end  {center}
+}
+	
+\newenvironment{mytable}[1]{%
+		\par\noindent\centering
+		\begin{longtable}{#1}
+			%\ifthenelse{\equal{#1}{{}}}{}{\caption{#1}}\\
+			%\endfirsthead
+}{%
+		\end  {longtable}
+}
+
+\newcommand*{\makeSignature}{%
+	\vfill
+	\noindent
+	Дата составления: \dateFin
+	\hfill
+	Подпись студента: \hbox to 3cm {\hrulefill}
+}
+
+%\AtBeginDocument{\fontsize{12pt}{16.8pt}\selectfont\relax}
+\AtEndDocument{\makeSignature}
+%\AtVeryEndDocument{\makeSignature}
